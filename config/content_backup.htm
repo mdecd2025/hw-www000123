@@ -41,7 +41,108 @@
 <p>使用 blender 和 webots 嘗試製作HW2</p>
 <p><img alt="" height="432" src="/images/w10-blender.png" width="800"/></p>
 <p>製作HW2</p>
-<p></p><h1>Homework</h1>
+<h2>w11</h2>
+<p>我能成功開啟伺服器，並從相同網路，不同電腦控制webot。</p>
+<p>但老師原本的程式操作起來十分的不順暢還無法停止，且對電腦負擔很大，所以我使用了chat gpt ，告訴他我覺得需要優化的方向，並讓他來幫我製作程式。</p>
+<p></p>
+<p>優化內容為 :</p>
+<p>1.<span>加入time的使用，將無限迴圈變成有過段時間才執行迴圈，避免cpu的浪費</span></p>
+<p>2.按下按鍵才連線，改變成持續連線降低延遲</p>
+<p>3.<span>按鍵按住時執行，放開停止</span></p>
+<p>4.程式修該簡潔明瞭</p>
+<p></p>
+<p>優化方式:</p>
+<p>1.將while迴圈都添加小延遲 列如: time.sleep(0.1)</p>
+<p>2和3 更改控制端程式，保持長期連線和<span>按鍵按住時執行，放開停止</span>的程式內容如下</p>
+<p>模組導入</p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">import websocket
+import json
+import keyboard  # For capturing key presses
+import time</pre>
+<p>webotscontorller 類型與在此類型下的定義功能</p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">class WebotsController:
+    def __init__(self, server_ip, server_port):
+        # 初始化 WebotsController 類別，設定伺服器 IP 和埠號
+        self.server_ip = server_ip              # 儲存 Webots 伺服器的 IPv6 位址
+        self.server_port = server_port          # 儲存 Webots 伺服器的連接埠
+        self.ws = None                          # 用來儲存 WebSocket 連線對象，預設為 None（尚未連線）
+        self.last_direction = None              # 儲存上一次發送的方向指令，用來避免重複發送相同指令
+
+    def connect(self):
+        """建立 WebSocket 連線。"""
+        if not self.ws:
+            # 如果尚未建立連線，才嘗試連線（避免重複連線）
+            ws_url = f"ws://[{self.server_ip}]:{self.server_port}"  # 使用 IPv6 格式建立連線 URL
+            self.ws = websocket.create_connection(ws_url)           # 建立 WebSocket 連線
+            print("Connected to Webots server.")                    # 顯示連線成功訊息
+
+    def send_command(self, direction):
+        """傳送控制指令給機器人。"""
+        # 檢查是否已建立連線，並且指令與上次不同，才發送（避免重複發送相同指令）
+        if self.ws and direction != self.last_direction:
+            message = json.dumps({"direction": direction})          # 將方向指令轉成 JSON 格式的字串
+            self.ws.send(message)                                   # 通過 WebSocket 傳送訊息
+            print(f"Sent command: {direction}")                     # 顯示傳送成功的方向訊息
+            self.last_direction = direction                         # 更新上次發送的指令
+
+    def close(self):
+        """關閉 WebSocket 連線。"""
+        if self.ws:
+            self.ws.close()             # 關閉連線
+            print("Connection closed.") # 顯示已關閉的提示訊息
+            self.ws = None              # 將 ws 設為 None，代表目前沒有連線
+</pre>
+<p><span>主程式內容</span></p>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">def main():
+
+    # 設定 Webots 機器人的 IPv6 伺服器位址與連接埠
+    server_ip = "2001:288:6004:17:fff1:cd25:0:b011"  # 替換為你自己的 Webots 伺服器位址
+    server_port = 1234  # 伺服器開放的 WebSocket 通訊埠
+
+    # 建立控制器物件，用來管理連線與指令傳送
+    controller = WebotsController(server_ip, server_port)
+    
+    print("使用方向鍵控制機器人（UP, DOWN, LEFT, RIGHT）。按下 ESC 鍵退出。")
+
+    while True:
+        try:
+            # 如果還沒有連線，就嘗試建立連線（只建立一次，除非被關閉）
+            if not controller.ws:
+                controller.connect()
+
+            # 偵測是否按下方向鍵，按下對應方向就送出指令
+            if keyboard.is_pressed("up"):
+                controller.send_command("UP")        # 上鍵 → 前進
+            elif keyboard.is_pressed("down"):
+                controller.send_command("DOWN")      # 下鍵 → 後退
+            elif keyboard.is_pressed("left"):
+                controller.send_command("LEFT")      # 左鍵 → 向左旋轉或橫移
+            elif keyboard.is_pressed("right"):
+                controller.send_command("RIGHT")     # 右鍵 → 向右旋轉或橫移
+            else:
+                # 若沒有按任何方向鍵，送出停止指令
+                if controller.ws:
+                    controller.send_command("STOP")
+
+            # 若按下 ESC 鍵，跳出主迴圈結束程式
+            if keyboard.is_pressed("esc"):
+                print("正在退出程式...")
+                break
+
+            # 加入一點點延遲，避免迴圈過度佔用 CPU 資源
+            time.sleep(0.05)
+
+        except Exception as e:
+            # 若執行過程出現錯誤，印出錯誤訊息並中斷迴圈
+            print(f"發生錯誤: {e}")
+            break
+</pre>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">if __name__ == "__main__":
+    main()</pre>
+<p>伺服端檔案</p>
+<p><span>控制端檔案</span></p>
+<p><code></code></p>
+<p><code></code></p><h1>Homework</h1>
 <h2>HW1</h2>
 <p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">每一個連接的長度設定</span></span></p>
 <table height="100" width="282">
@@ -98,7 +199,7 @@
 <p><span>國立虎尾科技大學 - 機械設計工程系 - cd2025 HW2 - 41023237</span></p>
 <p><span><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/SXpkGqDxffc" width="560"></iframe></span></p>
 <p>製作完整的過程</p>
-<p></p>
+<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/zWUPZCEO5uQ" width="560"></iframe></p>
 <p></p><h2>HW3</h2>
 <p></p>
 <p></p>
