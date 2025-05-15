@@ -143,8 +143,46 @@ img.add_border {
           
         </header>
     <div id="tipue_search_content">Exam1 << <a href='Exam1.html'>Previous</a> <a href='Exam3.html'>Next</a> >> Exam3<br /><h1>Exam2</h1>
-<p></p>
-<br />Exam1 << <a href='Exam1.html'>Previous</a> <a href='Exam3.html'>Next</a> >> Exam3</div>
+<p>先繪製桿件</p>
+<table width="334">
+<tbody>
+<tr style="height: 16px;">
+<td style="width: 104px; height: 16px;">link1</td>
+<td style="width: 104px; height: 16px;">藍色</td>
+<td style="width: 104px; height: 16px;">1.37m</td>
+</tr>
+<tr style="height: 16px;">
+<td style="width: 104px; height: 16px;">link2</td>
+<td style="width: 104px; height: 16px;">綠色</td>
+<td style="width: 104px; height: 16px;">1m</td>
+</tr>
+<tr style="height: 16px;">
+<td style="width: 104px; height: 16px;"><span>link3</span></td>
+<td style="width: 104px; height: 16px;">黃色</td>
+<td style="width: 104px; height: 16px;">1.0305m</td>
+</tr>
+<tr style="height: 13.75px;">
+<td style="width: 104px; height: 13.75px;">base to base</td>
+<td style="width: 104px; height: 13.75px;">紅色</td>
+<td style="width: 104px; height: 13.75px;">2m</td>
+</tr>
+</tbody>
+</table>
+<p>robot架構</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">robot
+    base
+    joint1
+        link1
+        joint2
+            link2
+            joint3
+                link3
+    joint4
+        solidreference(link3)
+    base2</pre>
+<p>Exam2 檔案 <a href="./../downloads/exam2.zip">Exam2</a></p>
+<p><span>國立虎尾科技大學 - 機械設計工程系 - cd2025 Exam2 - 41023237</span></p>
+<p><span><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/t4Mn1No8QWc" width="560"></iframe></span></p><br />Exam1 << <a href='Exam1.html'>Previous</a> <a href='Exam3.html'>Next</a> >> Exam3</div>
         
     <!-- footer -->
       <div class="container">
