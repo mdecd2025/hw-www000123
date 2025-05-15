@@ -244,8 +244,46 @@ import time</pre>
 <p>Exam1 檔案 <a href="/downloads/exam1.zip">Exam1</a><br/><br/></p>
 <p><span>國立虎尾科技大學 - 機械設計工程系 - cd2025 Exam1 - 41023237</span></p>
 <p><span><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/Qf2MZqzVxls" width="560"></iframe></span></p><h2>Exam2</h2>
-<p></p>
-<h2>Exam3</h2>
+<p>先繪製桿件</p>
+<table width="334">
+<tbody>
+<tr style="height: 16px;">
+<td style="width: 104px; height: 16px;">link1</td>
+<td style="width: 104px; height: 16px;">藍色</td>
+<td style="width: 104px; height: 16px;">1.37m</td>
+</tr>
+<tr style="height: 16px;">
+<td style="width: 104px; height: 16px;">link2</td>
+<td style="width: 104px; height: 16px;">綠色</td>
+<td style="width: 104px; height: 16px;">1m</td>
+</tr>
+<tr style="height: 16px;">
+<td style="width: 104px; height: 16px;"><span>link3</span></td>
+<td style="width: 104px; height: 16px;">黃色</td>
+<td style="width: 104px; height: 16px;">1.0305m</td>
+</tr>
+<tr style="height: 13.75px;">
+<td style="width: 104px; height: 13.75px;">base to base</td>
+<td style="width: 104px; height: 13.75px;">紅色</td>
+<td style="width: 104px; height: 13.75px;">2m</td>
+</tr>
+</tbody>
+</table>
+<p>robot架構</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">robot
+    base
+    joint1
+        link1
+        joint2
+            link2
+            joint3
+                link3
+    joint4
+        solidreference(link3)
+    base2</pre>
+<p>Exam2 檔案 <a href="/downloads/exam2.zip">Exam2</a></p>
+<p><span>國立虎尾科技大學 - 機械設計工程系 - cd2025 Exam2 - 41023237</span></p>
+<p><span><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/t4Mn1No8QWc" width="560"></iframe></span></p><h2>Exam3</h2>
 <p><span>Exam3-1</span></p>
 <p><span>webotsw --stream 啟動</span></p>
 <pre><code>輸入網頁 http://[2001:288:6004:17:fff1:cd25:0:b011]:1234/index.html<br/>填入 ws:/</code><code>[2001:288:6004:17:fff1:cd25:0:b011]</code><code>:1234 <br/>連接就可以順利在<span>瀏覽器檢視啟動串流學員伺服器上的機構模擬<br/><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/l2Q1ypVZbEM" width="560"></iframe><br/></span></code></pre>
